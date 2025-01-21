@@ -1,101 +1,147 @@
-// import 'package:fl_chart/fl_chart.dart';
-// import 'package:flutter/material.dart';
-//
-// class Overview extends StatefulWidget {
-//   const Overview({super.key});
-//
-//   @override
-//   State<Overview> createState() => _OverviewState();
-// }
-//
-// class _OverviewState extends State<Overview> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//         appBar: AppBar(
-//             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-//             title:Text('Goals Parameter')
-//         ),
-//         body:   Container(
-//             child: ListView(
-//               children: [
-//                 SingleChildScrollView(
-//                   scrollDirection: Axis.horizontal,
-//                   child: Container(
-//                     height:200,
-//                     width: 50,
-//                     color: Colors.red,
-//                     child: Row(
-//                       children: [
-//
-//                               SizedBox(
-//                   height:50,
-//                   child:PieChart(PieChartData(
-//                       startDegreeOffset: 270,
-//                       sections: [
-//                         PieChartSectionData(
-//                             value:50,
-//                             radius:10
-//                         ),
-//                         PieChartSectionData(
-//                             value:50,
-//                             showTitle: false,
-//                             color: Colors.grey,
-//                             radius:10
-//                         )
-//                       ]
-//                   ))
-//                               ),
-//                               // Column(
-//                               //   children: [
-//                               //     Text("Emergency Fund",style:TextStyle(fontSize:11,fontWeight: FontWeight.w600)),
-//                               //     Text("1.5 yr",style: TextStyle(fontSize:16),),
-//                               //   ],
-//                               // ),
-//                         // Text("2,00,000",style: TextStyle(fontSize:16)),
-//                         // Icon(Icons.lock)
-//
-//                       ],
-//                     ),
-//                   ),
-//                 ),
-//                 // Container(
-//                 //   color: Colors.red,
-//                 //   child: Row(
-//                 //     children: [],
-//                 //   ),
-//                 // ),
-//                 // Container(
-//                 //   color: Colors.red,
-//                 //   child: Row(
-//                 //     children: [],
-//                 //   ),
-//                 // ),
-//                 // Text("Note:Locked represent the Goal you want to freeze and changes wont be reflected in them",style: TextStyle(fontSize: 12,color: Colors.blue),)
-//
-//
-//               ],
-//             ),
-//             // child: SizedBox(
-//             //   height:90,
-//             //   child:PieChart(PieChartData(
-//             //     startDegreeOffset: 270,
-//             //     sections: [
-//             //       PieChartSectionData(
-//             //         value:50,
-//             //         radius:20
-//             //       ),
-//             //       PieChartSectionData(
-//             //           value:50,
-//             //           showTitle: false,
-//             //           color: Colors.grey,
-//             //           radius:10
-//             //       )
-//             //     ]
-//             //   ))
-//             // ),
-//           ),
-//
-//     );
-//   }
-// }
+import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+
+
+class LineGraphExample extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Line Graph with Labels'),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: LineChart(
+                LineChartData(
+                  gridData: FlGridData(show: true),
+                  titlesData: FlTitlesData(
+                    leftTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        getTitlesWidget: (value, meta) {
+                          if (value % 2 == 0) {
+                            return Text(
+                              '₹${(value * 2).toStringAsFixed(0)}L',
+                              style: TextStyle(fontSize: 12.sp),
+                            );
+                          }
+                          return Container();
+                        },
+                        reservedSize: 50,
+                      ),
+                    ),
+                    bottomTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        getTitlesWidget: (value, meta) {
+                          if (value % 2 == 0) {
+                            return Text(
+                              (2000 + value * 2).toString(),
+                              style: TextStyle(fontSize: 12.sp),
+                            );
+                          }
+                          return Container();
+                        },
+                      ),
+                    ),
+                  ),
+                  borderData: FlBorderData(
+                    show: true,
+                    border: const Border.symmetric(
+                      horizontal: BorderSide(color: Colors.black, width: 1),
+                      vertical: BorderSide(color: Colors.black, width: 1),
+                    ),
+                  ),
+                  minX: 0,
+                  maxX: 6,
+                  minY: 0,
+                  maxY: 6,
+                  lineBarsData: [
+                    // Emergency Line (Blue)
+                    LineChartBarData(
+                      spots: [
+                        FlSpot(0, 1),
+                        FlSpot(1, 2),
+                        FlSpot(2, 3),
+                        FlSpot(3, 4),
+                        FlSpot(4, 5),
+                        FlSpot(5, 6),
+                      ],
+                      isCurved: true,
+                      color: Colors.blue,
+                      dotData: FlDotData(show: true),
+                      belowBarData: BarAreaData(show: false),
+                    ),
+                    // Retirement Line (Red)
+                    LineChartBarData(
+                      spots: [
+                        FlSpot(0, 2),
+                        FlSpot(1, 2.5),
+                        FlSpot(2, 3.5),
+                        FlSpot(3, 4.5),
+                        FlSpot(4, 5.5),
+                        FlSpot(5, 6),
+                      ],
+                      isCurved: true,
+                      color: Colors.red,
+                      dotData: FlDotData(show: true),
+                      belowBarData: BarAreaData(show: false),
+                    ),
+                    // Travel Line (Green)
+                    LineChartBarData(
+                      spots: [
+                        FlSpot(0, 1.5),
+                        FlSpot(1, 2),
+                        FlSpot(2, 2.5),
+                        FlSpot(3, 3),
+                        FlSpot(4, 4),
+                        FlSpot(5, 5),
+                      ],
+                      isCurved: true,
+                      color: Colors.green,
+                      dotData: FlDotData(show: true),
+                      belowBarData: BarAreaData(show: false),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          // Legend
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildLegendItem(Colors.blue, 'Emergency'),
+                SizedBox(width: 16.w),
+                _buildLegendItem(Colors.red, 'Retirement'),
+                SizedBox(width: 16.w),
+                _buildLegendItem(Colors.green, 'Travel'),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLegendItem(Color color, String text) {
+    return Row(
+      children: [
+        Container(
+          width: 12.w,
+          height: 12.h,
+          color: color,
+        ),
+        SizedBox(width: 8.w),
+        Text(text, style: TextStyle(fontSize: 14.sp)),
+      ],
+    );
+  }
+}
